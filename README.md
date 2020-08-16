@@ -3,7 +3,8 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 
 # Functional files
 
-* All files in Includes/CTRPluginFramework/ and Includes/ctrulib *
+- All files in Includes/CTRPluginFramework/ and Includes/ctrulib
+
 
 - Sources/CTRPluginFramework/Graphics/Color.cpp
 - Sources/CTRPluginFramework/System/Clock.cpp
@@ -17,6 +18,10 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 
 - Sources/CTRPluginFrameworkImpl/System/SytemImpl.cpp
 - Includes/CTRPluginFrameworkImpl/System/SytemImpl.cpp
+
+# In progress
+
+- /Sources/CTRPluginFramework/System/Task.cpp
 
 # Decompiled files
 
