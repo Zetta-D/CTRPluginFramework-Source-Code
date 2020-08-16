@@ -3,7 +3,7 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 
 # Functional files
 
-All files in Includes/CTRPluginFramework/ and Includes/ctrulib
+* All files in Includes/CTRPluginFramework/ and Includes/ctrulib *
 
 - Sources/CTRPluginFramework/Graphics/Color.cpp
 - Sources/CTRPluginFramework/System/Clock.cpp
