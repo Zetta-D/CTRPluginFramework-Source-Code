@@ -15,6 +15,7 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 - /Sources/CTRPluginFramework/System/System.cpp
 - /Sources/CTRPluginFramework/System/Time.cpp
 - /Sources/CTRPluginFramework/System/Touch.cpp
+- /Includes/CTRPluginFrameworkImpl/Utils/LineReader.cpp
 
 - /Sources/CTRPluginFrameworkImpl/System/SytemImpl.cpp
 - /Includes/CTRPluginFrameworkImpl/System/SytemImpl.hpp
