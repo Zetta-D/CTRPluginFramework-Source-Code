@@ -23,6 +23,7 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 # In progress
 
 - /Sources/CTRPluginFramework/System/Task.cpp
+- /Sources/CTRPluginFramework/Utils/LineWriter.cpp
 - /Sources/CTRPluginFramework/Graphics/OSD.cpp
 
 # Decompiled files
