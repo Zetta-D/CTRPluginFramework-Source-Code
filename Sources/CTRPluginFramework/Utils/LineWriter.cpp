@@ -18,8 +18,8 @@ namespace CTRPluginFramework
     {
     	if (_offsetInBuffer && _output.IsOpen())
     	{
-    			_output.Flush();
-    			_offsetInBuffer = 0;
+    		_output.Flush();
+    		_offsetInBuffer = 0;
     	}
     	return result;
     }
