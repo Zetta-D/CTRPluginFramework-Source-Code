@@ -21,14 +21,13 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 - /Includes/CTRPluginFrameworkImpl/System/SytemImpl.hpp
 
 - /Sources/CTRPluginFramework/System/Process.cpp (except for functions Read/Write/Convert String)
-- /Sources/CTRPluginFramework/System/Hook.cpp (replace hook instance (ptr))
+- /Sources/CTRPluginFramework/System/Hook.cpp (replace pointers of HookManager::instance by variables)
 
 # In progress
 
 - /Sources/CTRPluginFramework/System/Task.cpp
 - /Sources/CTRPluginFramework/Utils/LineWriter.cpp
 - /Sources/CTRPluginFramework/Graphics/OSD.cpp
-HookManager::instance
 
 # Decompiled files
 
