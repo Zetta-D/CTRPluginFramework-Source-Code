@@ -14,7 +14,7 @@ namespace CTRPluginFramework
     	Heap::Alloc(0x1000, _buffer);
     }
 
-    void		LineWriter::Flush(void)
+    void LineWriter::Flush(void)
     {
     	if (_offsetInBuffer && _output.IsOpen())
     	{
@@ -24,7 +24,7 @@ namespace CTRPluginFramework
     	return result;
     }
 
-    void		LineWriter::Close(void)
+    void LineWriter::Close(void)
     {
     	LineWriter::Flush();
     	_output.Close();
@@ -46,7 +46,7 @@ namespace CTRPluginFramework
     		i_endl = (int)algn_10;
     		std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::_S_copy_chars();
     		dword_C = 2;
-    		*(_BYTE *)(i_endl + 2) = 0;
+    		*(u8 *)(i_endl + 2) = 0;
     		_cxa_guard_release(&c_endl);
     		_aeabi_atexit(
     			&i_endl,
@@ -61,29 +61,29 @@ namespace CTRPluginFramework
     	int v2; // r2
     	LineWriter *v3; // r4
     	char *v4; // r5
-    	_BYTE *v5; // r3
+    	u8 *v5; // r3
     	int v6; // r6
     	char v7; // r7
     	char v8; // t1
 
-    	v2 = *(_DWORD *)(a2 + 4);
+    	v2 = *(u32 *)(a2 + 4);
     	v3 = this;
     	if ( v2 )
     	{
     		v4 = *(char **)a2;
-    		v5 = (_BYTE *)(*((_DWORD *)this + 2) + *((_DWORD *)this + 1));
-    		v6 = *(_DWORD *)a2 + v2;
+    		v5 = (u8 *)(*((u32 *)this + 2) + *((u32 *)this + 1));
+    		v6 = *(u32 *)a2 + v2;
     		while ( v4 != (char *)v6 )
     		{
     			v8 = *v4++;
     			v7 = v8;
-    			if ( *((_DWORD *)v3 + 1) > 0xFFFu )
+    			if ( *((u32 *)v3 + 1) > 0xFFFu )
     			{
     				LineWriter::Flush((int)v3);
-    				v5 = (_BYTE *)*((_DWORD *)v3 + 2);
+    				v5 = (u8 *)*((u32 *)v3 + 2);
     			}
     			*v5++ = v7;
-    			++*((_DWORD *)v3 + 1);
+    			++*((u32 *)v3 + 1);
     		}
     	}
     	return v3;
