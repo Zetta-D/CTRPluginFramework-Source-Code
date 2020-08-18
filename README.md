@@ -11,6 +11,7 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 - /Sources/CTRPluginFramework/System/Controller.cpp
 - /Sources/CTRPluginFramework/System/Lock.cpp
 - /Sources/CTRPluginFramework/System/Mutex.cpp
+- /Sources/CTRPluginFramework/System/Process.cpp (except for functions Read/Write/Convert String)
 - /Sources/CTRPluginFramework/System/Sleep.cpp
 - /Sources/CTRPluginFramework/System/System.cpp
 - /Sources/CTRPluginFramework/System/Time.cpp
