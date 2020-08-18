@@ -13,8 +13,6 @@ namespace CTRPluginFramework
 
  	void Hook::Initialize(u32 targetAddr, u32 callbackAddr, u32 returnAddr)
  	{
- 	 	if(!returnAddr)
- 	 	 	returnAddr = ;
  	 	targetAddress = targetAddr;
  	 	callbackAddress = callbackAddr;
  	 	returnAddress = returnAddr ? returnAddr : targetAddr + 4;
