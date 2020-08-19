@@ -16,6 +16,7 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 - /Sources/CTRPluginFramework/System/Time.cpp
 - /Sources/CTRPluginFramework/System/Touch.cpp
 - /Includes/CTRPluginFrameworkImpl/Utils/LineReader.cpp
+- /Includes/CTRPluginFrameworkImpl/Utils/MessageBox.cpp
 
 - /Sources/CTRPluginFrameworkImpl/System/SytemImpl.cpp
 - /Includes/CTRPluginFrameworkImpl/System/SytemImpl.hpp
@@ -32,21 +33,15 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 # Decompiled files
 
 - /Sources/bootloader.s
-- /Sources/CTRPluginFramework/Graphics/OSD.cpp
 - /Sources/CTRPluginFramework/Menu/Keyboard.cpp
 - /Sources/CTRPluginFramework/Menu/MenuEntry.cpp
 - /Sources/CTRPluginFramework/Menu/MenuFolder.cpp
-- /Sources/CTRPluginFramework/Menu/MessageBox.cpp
 - /Sources/CTRPluginFramework/Menu/PluginMenu.cpp
 - /Sources/CTRPluginFramework/System/Directory.cpp
 - /Sources/CTRPluginFramework/System/File.cpp
 - /Sources/CTRPluginFramework/System/FwkSettings.cpp
-- /Sources/CTRPluginFramework/System/Hook.cpp
-- /Sources/CTRPluginFramework/System/Process.cpp
 - /Sources/CTRPluginFramework/System/System.cpp
 - /Sources/CTRPluginFramework/System/Task.cpp
-- /Sources/CTRPluginFramework/Utils/LineReader.cpp
-- /Sources/CTRPluginFramework/Utils/LineWriter.cpp
 - /Sources/CTRPluginFramework/Utils/StringExtensions.cpp
 - /Sources/CTRPluginFramework/Utils/Utils.cpp
 - /Sources/CTRPluginFrameworkImpl/ActionReplay/ARCode.cpp
