@@ -28,6 +28,8 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 
 - /Sources/CTRPluginFramework/System/Task.cpp
 - /Sources/CTRPluginFramework/System/File.cpp
+- /Sources/CTRPluginFramework/Menu/MenuEntry.cpp
+- /Sources/CTRPluginFramework/Menu/PluginMenu.cpp
 - /Sources/CTRPluginFramework/Utils/LineWriter.cpp
 - /Sources/CTRPluginFramework/Graphics/OSD.cpp
 
@@ -37,7 +39,6 @@ Hey, everybody. So here it is, as Nanquitas has decided to ruin my work... I've 
 - /Sources/CTRPluginFramework/Menu/Keyboard.cpp
 - /Sources/CTRPluginFramework/Menu/MenuEntry.cpp
 - /Sources/CTRPluginFramework/Menu/MenuFolder.cpp
-- /Sources/CTRPluginFramework/Menu/PluginMenu.cpp
 - /Sources/CTRPluginFramework/System/Directory.cpp
 - /Sources/CTRPluginFramework/System/FwkSettings.cpp
 - /Sources/CTRPluginFramework/System/System.cpp
