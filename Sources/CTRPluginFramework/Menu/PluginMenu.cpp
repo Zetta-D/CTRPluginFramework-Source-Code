@@ -7,13 +7,11 @@ namespace CTRPluginFramework
     PluginMenu::PluginMenu(std::string name = "Cheats", std::string about = "")
     {
         _menu = std::make_uniue<PluginMenuImpl>(new PluginMenuImpl(name, about));
-        PluginMenuImpl::PluginMenuImpl(name, about);
     }
 
     PluginMenu::PluginMenu(std::string name, void *about, DecipherPointer func)
     {
-        _menu = std::make_uniue<PluginMenuImpl>(new PluginMenuImpl(name, about));
-        PluginMenuImpl::PluginMenuImpl(name, about, func);
+        _menu = std::make_uniue<PluginMenuImpl>(new PluginMenuImpl(name, about, func));
     }
 
     PluginMenu::PluginMenu(std::string name, u32 major, u32 minor, u32 revision, std::string about = "")
