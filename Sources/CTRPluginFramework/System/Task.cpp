@@ -46,7 +46,7 @@ namespace CTRPluginFramework
     {
     	u32 v3, v4
 
-    	if (refcount)
+    	if (context->refcount)
     	{
     		__mcr(15, 0, (u32)context, 7, 10, 5);
     		do
@@ -63,26 +63,26 @@ namespace CTRPluginFramework
 
     int Task::Start(void) const
     {
-    	if (!refcount)
+    	if (!context->refcount)
     		return -1;
-    	LightEvent_Clear(&event);
-    	return Scheduler::Schedule(refcount);
+    	LightEvent_Clear(&context->event);
+    	return Scheduler::Schedule(context->refcount);
     }
 
     s32 Task::Wait(void) const
     {
-    	if ( !refcount )
+    	if ( !context->refcount )
     		return -1;
-    	if ( !flags & 0xFFFFFFFB) )
+    	if ( !context->flags & 0xFFFFFFFB) )
     		return result;
-    	LightEvent_Wait(&event);
+    	LightEvent_Wait(&context->event);
     	return result;
     }
 
     u32 Task::Status(void) const
     {
-    	if (refcount)
-    		return flags;
+    	if (context->refcount)
+            return context->flags;
     	return -1;
     }
 }
