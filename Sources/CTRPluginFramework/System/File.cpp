@@ -34,331 +34,226 @@ namespace CTRPluginFramework {
     return result;
   }
 
-  //----- (0000004C) --------------------------------------------------------
-  int File::Close(File * this, int a2, int a3) {
-    File * v3; // r4
-    int v4; // r5
-    File * v6; // [sp+0h] [bp-18h]
-    int v7; // [sp+4h] [bp-14h]
-    int v8; // [sp+8h] [bp-10h]
-
-    v6 = this;
-    v7 = a2;
-    v8 = a3;
-    v3 = this;
-    Lock::Lock((Lock * ) & v6, (File * )((char * ) this + 48));
-    if ( * ((_BYTE * ) v3 + 44)) {
-      v4 = FSFILE_Close( * ((_DWORD * ) v3 + 6));
-      if (v4 >= 0) {
-        std::__cxx11::basic_string < char, std::char_traits < char > , std::allocator < char >> ::operator = (v3, & unk_B6C);
-        *((_QWORD * ) v3 + 4) = 0 LL;
-        *((_DWORD * ) v3 + 6) = 0;
-        *((_DWORD * ) v3 + 10) = 0;
-        *((_BYTE * ) v3 + 44) = 0;
+  int File::Close(void) const
+  {
+    int res;
+    Lock::Lock(_mutex);
+    if (_isOpen) {
+      res = FSFILE_Close(_handle);
+      if (res >= 0)
+      {
+        _path = ""
+        _offset = 0
+        _handle = 0;
+        _mode = 0;
+        _isOpen = false;
       }
-    } else {
-      v4 = -2;
-    }
-    Lock::~Lock((Lock * ) & v6);
-    return v4;
+    else
+      res = -2;
+    Lock::~Lock();
+    return res;
   }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
-  // B78: using guessed type int FSFILE_Close(_DWORD);
-  // B7C: using guessed type int std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator=(_DWORD, _DWORD);
 
-  //----- (000000C0) --------------------------------------------------------
-  signed int File::Read(File * this, void * a2, unsigned int a3) {
-    File * v3; // r5
-    Process * v4; // r6
-    signed int v5; // r4
-    unsigned int v6; // r2
-    unsigned int v8; // [sp+Ch] [bp-24h]
-    char v9; // [sp+10h] [bp-20h]
-
-    v3 = this;
-    v4 = (Process * ) a2;
-    v5 = a3;
-    Lock::Lock((Lock * ) & v9, (File * )((char * ) this + 48));
-    if ( * ((_BYTE * ) v3 + 44)) {
-      if ( * ((_DWORD * ) v3 + 10) & 1) {
-        if (v4 && Process::CheckAddress(v4, 2 u, v6)) {
-          if (v5) {
-            v5 = FSFILE_Read( * ((_DWORD * ) v3 + 6), & v8, *((_QWORD * ) v3 + 4), *((_QWORD * ) v3 + 4) >> 32, v4, v5);
-            if (v5 >= 0) {
-              v5 = 0;
-              *((_QWORD * ) v3 + 4) += v8;
+  int File::Read(void *buffer, u32 length) const
+  {
+    u32 read;
+    int res;
+    Lock::Lock(_mutex);
+    if (_isOpen)
+    {
+      if (_mode & 1)
+      {
+        if (Process::CheckAddress(buffer))
+        {
+          if (lenght)
+          {
+            res = FSFILE_Read(_handle, &read, _offset, buffer, lenght);
+            if (res >= 0)
+            {
+              res = 0;
+              _offset += read;
             }
           }
-        } else {
-          v5 = -4;
         }
-      } else {
-        v5 = -3;
-      }
-    } else {
-      v5 = -2;
-    }
-    Lock::~Lock((Lock * ) & v9);
-    return v5;
+        else
+          res = -4;
+      } 
+      else
+        res = -3;
+    else
+      res = -2;
+    Lock::~Lock();
+    return res;
   }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
-  // B88: using guessed type int FSFILE_Read(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD);
 
-  //----- (00000178) --------------------------------------------------------
-  int File::Write(File * this,
-    const void * a2, unsigned int a3) {
-    File * v3; // r4
-    Process * v4; // r8
-    unsigned int v5; // r6
-    unsigned int v6; // r2
-    int v7; // r5
-    int v9; // r3
-    signed int v10; // r7
-    unsigned int v11; // [sp+14h] [bp-24h]
-    char v12; // [sp+18h] [bp-20h]
-
-    v3 = this;
-    v4 = (Process * ) a2;
-    v5 = a3;
-    Lock::Lock((Lock * ) & v12, (File * )((char * ) this + 48));
-    if ( * ((_BYTE * ) v3 + 44)) {
-      if ( * ((_DWORD * ) v3 + 10) & 2) {
-        if (v4 && Process::CheckAddress(v4, 1 u, v6)) {
-          if (v5) {
-            v9 = * ((_DWORD * ) v3 + 10);
-            v10 = 257;
-            if (!(v9 & 0x20))
-              v10 = 0;
-            if (!(v9 & 8) || (v7 = FSFILE_GetSize( * ((_DWORD * ) v3 + 6), (char * ) v3 + 32), v7 >= 0)) {
-              v7 = FSFILE_Write( * ((_DWORD * ) v3 + 6), & v11, *((_QWORD * ) v3 + 4), *((_QWORD * ) v3 + 4) >> 32, v4, v5, v10);
-              if (v7 >= 0) {
-                v7 = 0;
-                *((_QWORD * ) v3 + 4) += v11;
+  int File::Write(const void *data, u32 length)
+  {
+    int res;
+    u32 write; 
+    u64 size;
+    Lock::Lock(_mutex);
+    if (_isOpen)
+    {
+      if (_mode & 2)
+      {
+        if (Process::CheckAddress(buffer))
+        {
+          if (length)
+          {
+            FSFILE_GetSize(_handle, &size);
+            if (!(_mode & 8) || (size >= 0))
+            {
+              res = FSFILE_Write(_handle, &write, _offset, data, length, FS_WRITE_FLUSH);
+              if (res >= 0)
+              {
+                res = 0;
+                _offset += write;
               }
             }
-          } else {
-            v7 = 0;
           }
-        } else {
-          v7 = -4;
+          else
+            res = 0;
         }
-      } else {
-        v7 = -3;
+        else
+          res = -4;
       }
-    } else {
-      v7 = -2;
+      else
+        res = -3;
     }
-    Lock::~Lock((Lock * ) & v12);
-    return v7;
+    else
+      res = -2;
+    Lock::~Lock();
+    return res;
   }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
-  // B8C: using guessed type int FSFILE_Write(_DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD, _DWORD);
-  // B90: using guessed type int FSFILE_GetSize(_DWORD, _DWORD);
 
-  //----- (00000268) --------------------------------------------------------
-  int File::WriteLine(File * a1, int a2) {
-    int v2; // r4
-    File * v3; // r5
-
-    v2 = a2;
-    v3 = a1;
-    std::__cxx11::basic_string < char, std::char_traits < char > , std::allocator < char >> ::operator += (a2, & unk_B6D);
-    return File::Write(v3, *(const void ** ) v2, *(_DWORD * )(v2 + 4));
+  int File::WriteLine(std::string line)
+  {
+    return File::Write(static_cast<void*>(&line), line.size())
   }
-  // B94: using guessed type int std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::operator+=(_DWORD, _DWORD);
 
-  //----- (00000294) --------------------------------------------------------
-  int File::Seek(int a1, int a2, __int64 a3, char a4) {
-    int v4; // r6
-    __int64 v5; // r4
-    int v6; // r7
-    unsigned __int64 v8; // r0
-    unsigned __int64 v9; // [sp+0h] [bp-28h]
-    char v10; // [sp+8h] [bp-20h]
-
-    v4 = a1;
-    v5 = a3;
-    Lock::Lock((Lock * ) & v10, (Mutex * )(a1 + 48));
-    if ( * (_BYTE * )(v4 + 44)) {
-      if (a4 == 1) {
-        v9 = 0 LL;
-        if (v5 < 0)
-          goto LABEL_6;
-      } else {
-        if (a4) {
-          if (a4 != 2) {
-            LABEL_6: v6 = -4;
+  int File::Seek(s64 offset, SeekPos origin) const
+  {
+    int ptrSize(0);
+    s64 size(0), off(0);
+    Lock::Lock(_mutex);
+    if (_isOpen)
+    {
+      if (origin == SET)
+      {
+        off = 0;
+        if (offset < 0) goto LABEL_6;
+      }
+      else
+      {
+        if (origin)
+        {
+          if (origin != END)
+          {
+            LABEL_6: ptrSize = -4;
             goto LABEL_9;
           }
-          v6 = FSFILE_GetSize( * (_DWORD * )(v4 + 24), & v9);
-          if (v6 < 0)
-            goto LABEL_9;
-        } else {
-          v9 = * (_QWORD * )(v4 + 32);
+          ptrSize = FSFILE_GetSize(_handle, &size);
+          if (ptrSize < 0) goto LABEL_9;
         }
-        if (v5 < 0) {
-          LODWORD(v8) = -(signed int) v5;
-          HIDWORD(v8) = -(HIDWORD(v5) + ((unsigned int) v5 > 0));
-          if (v8 > v9)
-            goto LABEL_6;
-        }
+        else
+          off = _offset;
+        if (offset < 0)
+          if (-offset > off) goto LABEL_6;
       }
-      v6 = 0;
-      *(_QWORD * )(v4 + 32) = v9 + v5;
+      ptrSize = 0;
+      _offset = v9 + offset;
       goto LABEL_9;
     }
-    v6 = -2;
+    ptrSize = -2;
     LABEL_9:
-      Lock::~Lock((Lock * ) & v10);
-    return v6;
-  }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
-  // B90: using guessed type int FSFILE_GetSize(_DWORD, _DWORD);
-
-  //----- (00000378) --------------------------------------------------------
-  __int64 File::Tell(File * this) {
-    return *((_QWORD * ) this + 4);
+      Lock::~Lock();
+    return ptrSize;
   }
 
-  //----- (00000380) --------------------------------------------------------
-  int File::Rewind(File * this, int a2) {
-    File * v2; // r4
-    File * v4; // [sp+0h] [bp-10h]
-    int v5; // [sp+4h] [bp-Ch]
-
-    v4 = this;
-    v5 = a2;
-    v2 = this;
-    Lock::Lock((Lock * ) & v4, (File * )((char * ) this + 48));
-    *((_QWORD * ) v2 + 4) = 0 LL;
-    return Lock::~Lock((Lock * ) & v4);
+  u64 File::Tell(void) const
+  {
+    return _offset;
   }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
 
-  //----- (000003B0) --------------------------------------------------------
-  int File::Flush(File * this, int a2) {
-    File * v2; // r4
-    int v3; // r4
-    File * v5; // [sp+0h] [bp-10h]
-    int v6; // [sp+4h] [bp-Ch]
-
-    v5 = this;
-    v6 = a2;
-    v2 = this;
-    Lock::Lock((Lock * ) & v5, (File * )((char * ) this + 48));
-    v3 = FSFILE_Flush( * ((_DWORD * ) v2 + 6));
-    Lock::~Lock((Lock * ) & v5);
-    return v3;
+  void File::Rewind(void) const
+  {
+    Lock::Lock(_mutex);
+    _offset = 0;
+    Lock::~Lock();
   }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
-  // B98: using guessed type int FSFILE_Flush(_DWORD);
 
-  //----- (000003E4) --------------------------------------------------------
-  signed __int64 File::GetSize(File * this) {
-    File * v1; // r4
-    signed __int64 v2; // r4
-    int v3; // r0
-    int v4; // r0
-    __int64 v6; // [sp+0h] [bp-20h]
-    char v7; // [sp+8h] [bp-18h]
+  int File::Flush(void) const
+  {
+    int res(0);
+    Lock::Lock(_mutex);
+    res = FSFILE_Flush(_handle);
+    Lock::~Lock();
+    return res;
+  }
 
-    v1 = this;
-    Lock::Lock((Lock * ) & v7, (File * )((char * ) this + 48));
-    if ( * ((_BYTE * ) v1 + 44)) {
-      v3 = * ((_DWORD * ) v1 + 6);
-      v6 = 0 LL;
-      v4 = FSFILE_GetSize(v3, & v6);
-      if (v4 < 0)
-        v2 = v4;
+  u64 File::GetSize(void) const
+  {
+    u64 ret, size;
+    int res;
+    Lock::Lock(_mutex);
+    if (_isOpen)
+    {
+      size = 0;
+      res = FSFILE_GetSize(_handle, &size);
+      if (res < 0)
+        ret = res;
       else
-        v2 = v6;
-    } else {
-      v2 = -2 LL;
-    }
-    Lock::~Lock((Lock * ) & v7);
-    return v2;
+        ret = size;
+    else
+      ret = -2;
+    Lock::~Lock();
+    return ret;
   }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
-  // B90: using guessed type int FSFILE_GetSize(_DWORD, _DWORD);
 
-  //----- (00000450) --------------------------------------------------------
-  int File::SetPriority(File * this, unsigned int a2) {
-    return FSFILE_SetPriority( * ((_DWORD * ) this + 6), a2);
+  void File::SetPriority(u32 priority)
+  {
+    FSFILE_SetPriority(_handle, priority);
   }
-  // B9C: using guessed type int FSFILE_SetPriority(_DWORD, _DWORD);
 
-  //----- (00000458) --------------------------------------------------------
-  signed int File::Dump(File * this, unsigned int a2, unsigned int a3) {
-    File * v3; // r8
-    Process * v4; // r6
-    unsigned int v5; // r4
-    unsigned int v6; // r2
-    signed int v7; // r5
-    bool v8; // r1
-    int v9; // r9
-    Process * v10; // r0
-    int v11; // r0
-    unsigned int v12; // r7
-    unsigned int v13; // r0
-    bool v14; // r1
-    signed int v15; // r3
-    File * v17; // [sp+0h] [bp-28h]
-    unsigned int v18; // [sp+4h] [bp-24h]
-    unsigned int v19; // [sp+8h] [bp-20h]
-
-    v17 = this;
-    v18 = a2;
-    v19 = a3;
-    v3 = this;
-    v4 = (Process * ) a2;
-    v5 = a3;
-    Lock::Lock((Lock * ) & v17, (File * )((char * ) this + 48));
-    if ( * ((_BYTE * ) v3 + 44)) {
-      if ( * ((_DWORD * ) v3 + 10) & 2) {
-        v9 = Process::CheckAddress(v4, 1 u, v6);
-        if (v9) {
-          v10 = (Process * ) ProcessImpl::IsPaused;
-          if (ProcessImpl::IsPaused)
-            v9 = 0;
-          else
-            v10 = (Process * ) ProcessImpl::Pause(
-              ProcessImpl::IsPaused,
-              v8);
-          v11 = Process::GetHandle(v10);
-          svcFlushProcessDataCache(v11, v4, v5);
-          do {
-            if (v5 >= 0x8000)
-              v12 = 0x8000;
-            else
-              v12 = v5;
-            v13 = File::Write(v3, (const void * ) v4, v12);
-            v5 -= v12;
-            if (v5)
-              v15 = v13 >> 31;
-            else
-              v15 = 1;
-            v7 = v13;
-            v4 = (Process * )((char * ) v4 + v12);
+ int File::Dump(u32 address, u32 lenght)
+ {
+    int res;
+    u32 lenght, size, resWrite;
+    Lock::Lock(_handle);
+    if (_isOpen)
+    {
+      if ( _mode & 2)
+      {
+        if (Process::CheckAddress(address))
+        {
+          if (!ProcessImpl::IsPaused)
+            ProcessImpl::Pause();
+          Process::GetHandle(_handle);
+          svcFlushProcessDataCache(_handle, address, lenght);
+          do
+          {
+            size = (lenght >= 0x8000) ? 0x8000 : lenght;
+            resWrite = File::Write((void*)address, size);
+            lenght -= size;
+            res = resWrite;
+            address += size;
           }
-          while (!v15);
-          if (v9)
-            ProcessImpl::Play(0, v14);
-        } else {
-          v7 = -4;
+          while (!(lenght ? resWrite >> 31 : 1));
+          if (ProcessImpl::IsPaused)
+            ProcessImpl::Play(0);
         }
-      } else {
-        v7 = -3;
+        else
+          res = -4;
       }
-    } else {
-      v7 = -2;
+      else
+        res = -3;
     }
-    Lock::~Lock((Lock * ) & v17);
-    return v7;
+    else
+      res = -2;
+    Lock::~Lock();
+    return res;
   }
-  // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
-  // BA8: using guessed type int svcFlushProcessDataCache(_DWORD, _DWORD, _DWORD);
 
-  //----- (00000534) --------------------------------------------------------
   signed int File::Inject(File * this, unsigned int a2, unsigned int a3) {
     File * v3; // r8
     Process * v4; // r7
@@ -424,8 +319,9 @@ namespace CTRPluginFramework {
   // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
 
   //----- (0000063C) --------------------------------------------------------
-  int File::IsOpen(File * this) {
-    return *((unsigned __int8 * ) this + 44);
+  bool File::IsOpen(void) const
+  {
+    return _isOpen;
   }
 
   //----- (00000644) --------------------------------------------------------
@@ -506,44 +402,45 @@ namespace CTRPluginFramework {
     return v1;
   }
 
-  int File::Create(const std::string & path) {
-    Result res;
+  int File::Create(const std::string & path)
+  {
+    int res;
     FS_Path fsPath;
     const char * str = path;
-    FSPath::FSPath( & str, & fsPath);
-    if (!fsPath) {
+    FSPath::FSPath(str, fsPath);
+    if (!fsPath)
+    {
       res = FSUSER_CreateFile(_sdmcArchive, fsPath, 0, 0);
       return res & (res >> 31);
     }
     return -1;
   }
 
-  int File::Rename(const std::string & path,
-    const std::string & newpath); {
-    Result res;
+  int File::Rename(const std::string & path, const std::string & newpath); {
+    int res;
     FS_Archive dstArchive;
-    FS_Path dstPath;
-    FS_Path fsPath;
-    FS_Path newfsPath;
+    FS_Path dstPath, fsPath, newfsPath;
     const char * _fspath;
     const char * _newfspath;
 
     _fspath = path.c_str();
-    FSPath::FSPath( & _fspath, & fsPath);
+    FSPath::FSPath(_fspath, fsPath);
     _newfspath = newpath.c_str();
-    FSPath::FSPath( & _newfspath, & newfsPath);
-    if (!(fsPath | newfsPath)) {
-      res = FSUSER_RenameFile(_sdmcArchive, *(u32 * ) & _newfspath, dstArchive, dstPath)
+    FSPath::FSPath(_newfspath, newfsPath);
+    if (!(fsPath | newfsPath))
+    {
+      res = FSUSER_RenameFile(_sdmcArchive, _newfspath, dstArchive, dstPath)
       return res & (res >> 31);
     }
     return -1;
   }
 
-  int File::Remove(const std::string & path) {
-    Result res;
+  int File::Remove(const std::string & path)
+  {
+    int res;
     FS_Path fsPath;
     const char * str = path;
-    FSPath::FSPath( & str, & fsPath);
+    FSPath::FSPath(str, fsPath);
     if (!fsPath) {
       res = FSUSER_DeleteFile(_sdmcArchive, fsPath);
       return res & (res >> 31);
@@ -551,67 +448,67 @@ namespace CTRPluginFramework {
     return -1;
   }
 
-  int File::Exists(const std::string & path) {
-    Result res;
+  int File::Exists(const std::string & path)
+  {
     FS_Path fsPath;
     const char * str = path;
     Handle handle;
     FSPath::FSPath( & str, & fsPath);
-    if (!fsPath) {
-      if (FSUSER_OpenFile( & handle, _sdmcArchive, fsPath, 1, 0)) {
-
-      }
-    }
+    if (!fsPath)
+      if (FSUSER_OpenFile(&handle, _sdmcArchive, fsPath, 1, 0))
+        return 1;
     return -1;
   }
 
-  int File::Open(int a1, int a2, int a3) {
-    int v3; // r4
+  int File::Open(File &output, const std::string &path, int mode)
+  int File::Open(File &output, const std::string &path, int mode = READ | WRITE | SYNC)
+  int File::Open(int a1, int a2, int a3)
+  {
+    int output; // r4
     int v4; // r8
     int v5; // r6
     int v6; // r1
     int v7; // r2
     int v8; // r7
-    int v9; // r5
+    int res; // r5
     __int64 v10; // r8
-    int v12; // [sp+18h] [bp-58h]
-    char v13; // [sp+1Ch] [bp-54h]
+    Handle handle; // [sp+18h] [bp-58h]
     int v14; // [sp+24h] [bp-4Ch]
     char v15; // [sp+2Ch] [bp-44h]
     char v16; // [sp+38h] [bp-38h]
     int v17; // [sp+3Ch] [bp-34h]
     int v18; // [sp+40h] [bp-30h]
 
-    v3 = a1;
+    output = a1;
     v4 = a2;
     v5 = a3;
-    Lock::Lock((Lock * ) & v13, (Mutex * )(a1 + 48));
-    if ( * (_BYTE * )(v3 + 44))
-      File::Close((File * ) v3, v6, v7);
-    std::__cxx11::basic_string < char, std::char_traits < char > , std::allocator < char >> ::basic_string( & v16, v4);
+    Lock::Lock(output._mutex);
+    if (output._isOpen)
+      output.Close()
+    v16 = v4;
     FSPath::FSPath( & v14, & v16);
-    std::__cxx11::basic_string < char, std::char_traits < char > , std::allocator < char >> ::_M_dispose( & v16);
     v8 = v14;
-    if (v14) {
-      v9 = -1;
-    } else {
-      std::__cxx11::basic_string < char, std::char_traits < char > , std::allocator < char >> ::_M_assign(v3, v4);
-      FSPath::SdmcFixPath(v3);
-      v10 = _sdmcArchive;
+    if (v14)
+      res = -1;
+    else
+    {
+      output = v4;
+      FSPath::SdmcFixPath(output);
+      v10 = ;
       FSPath::operator FS_Path((int) & v16, & v14);
-      v9 = FSUSER_OpenFile( & v12, v17, v10, HIDWORD(v10), *(_DWORD * ) & v16, v17, v18, v5 & 7, v8);
-      if (v9 >= 0) {
-        *(_DWORD * )(v3 + 24) = v12;
-        *(_DWORD * )(v3 + 40) = v5;
-        *(_QWORD * )(v3 + 32) = 0 LL;
-        *(_BYTE * )(v3 + 44) = 1;
-        if (v5 & 0x10)
-          FSFILE_SetSize();
+      res = FSUSER_OpenFile(&handle, v17, _sdmcArchive, *(_DWORD * ) & v16, v17, v18, v5 & 7, v8);
+      if (res >= 0)
+      {
+        output._handle = handle;
+        output._mode = mode;
+        output._offset = 0;
+        output._isOpen = true;
+        if (mode & 0x10)
+          FSFILE_SetSize(handle, output.GetSize());
       }
     }
-    std::_Vector_base < unsigned short, std::allocator < unsigned short >> ::~_Vector_base((void ** ) & v15);
-    Lock::~Lock((Lock * ) & v13);
-    return v9;
+    Lock::~Lock();
+    return res;
   }
   // B74: using guessed type _DWORD __cdecl Lock::Lock(Lock *__hidden this, Mutex *);
   // BC0: using guessed type int std::__cxx11::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string(_DWORD, _DWORD);
