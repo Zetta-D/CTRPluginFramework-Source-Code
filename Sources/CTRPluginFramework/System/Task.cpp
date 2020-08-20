@@ -25,15 +25,15 @@ namespace CTRPluginFramework
     {
     	u32 *v2 = new u32[0x20];
     	u32 v3 = 0;
-    	__mcr(15, 0, context->refcount, 7, 10, 5);
+    	__mcr(15, 0, task.context->refcount, 7, 10, 5);
     	do
     		v3 = __ldrex(v2);
     	while ( __strex(v3 + 1, v2) );
-    	__mcr(15, 0, context->refcount, 7, 10, 5);
+    	__mcr(15, 0, task.context->refcount, 7, 10, 5);
         context->affinity = task.context->affinity;
         context->func = task.context->func;
         context->arg = task.context->arg;
-        LightEvent_Init(&context->event);
+        LightEvent_Init(&task.context->event);
         delete v2;
     }
 
