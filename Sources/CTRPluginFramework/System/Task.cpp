@@ -2,7 +2,7 @@
 
 namespace CTRPluginFramework
 {
-    Task::Task(TaskFunc func, void *arg = nullptr, s32 affinity)
+    Task::Task(TaskFunc func, void *arg, s32 affinity)
     {
     	u32 *v8 = new u32[0x20];
     	u32 *v9 = new u32[0x20];
