@@ -2,7 +2,7 @@
 
 namespace CTRPluginFramework
 {
-    Task::Task(TaskFunc func, void *arg = nullptr, s32 affinity = -1)
+    Task::Task(TaskFunc func, void *arg = nullptr, s32 affinity)
     {
     	u32 *v8 = new u32[0x20];
     	u32 *v9 = new u32[0x20];
@@ -44,15 +44,13 @@ namespace CTRPluginFramework
 
     Task::~Task(void)
     {
-    	u32 v3, v4
-
+    	u32 v4
     	if (context->refcount)
     	{
     		__mcr(15, 0, (u32)context, 7, 10, 5);
     		do
     		{
-    			v3 = __ldrex(*(u32 **)context);
-    			v4 = v3 - 1;
+    			v4 = __ldrex(*(u32 **)context) - 1;
     		}
     		while ( __strex(v4, *(u32 **)context) );
     		__mcr(15, 0, (u32)refcount, 7, 10, 5);
@@ -74,9 +72,9 @@ namespace CTRPluginFramework
     	if ( !context->refcount )
     		return -1;
     	if ( !context->flags & 0xFFFFFFFB) )
-    		return result;
+    		return context->result;
     	LightEvent_Wait(&context->event);
-    	return result;
+    	return context->result;
     }
 
     u32 Task::Status(void) const
