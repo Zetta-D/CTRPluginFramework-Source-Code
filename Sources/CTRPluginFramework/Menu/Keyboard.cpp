@@ -12,7 +12,7 @@ namespace CTRPluginFramework
         ConvertToDouble
     */
 
-	enum class Layout
+    enum class Layout
 	{
 		Qwerty,
 		Decimal,
@@ -254,7 +254,7 @@ namespace CTRPluginFramework
     {
     	_keyboard->SetLayout(_hexadecimal ? Layout::Hexadecimal : Layout::Decimal)
     	if (_hexadecimal)
-    		_keyboard->SetMaxInput(8);
+    		_keyboard->SetMaxInput(2);
     	_keyboard->CanChangeLayout(true);
     	_keyboard->SetConvertCallback(ConvertToU8);
     	int res = _keyboard->Run();
@@ -268,7 +268,7 @@ namespace CTRPluginFramework
     	bool isEmpty = _keyboard->GetInput().empty();
     	_keyboard->SetLayout(_hexadecimal ? Layout::Hexadecimal : Layout::Decimal)
     	if (_hexadecimal)
-    		_keyboard->SetMaxInput(8);
+    		_keyboard->SetMaxInput(2);
     	_keyboard->CanChangeLayout(true);
     	_keyboard->SetConvertCallback(ConvertToU8);
     	int res = _keyboard->Run();
