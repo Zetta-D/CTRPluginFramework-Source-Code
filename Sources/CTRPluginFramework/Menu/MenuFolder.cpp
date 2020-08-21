@@ -4,7 +4,7 @@
 namespace CTRPluginFramework
 {
     /* 
-		***TO DO***
+        ***TO DO***
     	void UseTopSeparator(Separator type = Separator::Filled) const;
     	void UseBottomSeparator(Separator type = Separator::Filled) const;
     	-> MenuFolderImpl
@@ -29,91 +29,91 @@ namespace CTRPluginFramework
     		_item->Append(entries);
     }
 
-    void Hide(void) const
+    void MenuFolder::Hide(void) const
     {
     	_item->Hide();
     }
 
-    void Show(void) const
+    void MenuFolder::Show(void) const
     {
     	_item->Show();
     }
 
-    bool IsVisible(void) const
+    bool MenuFolder::IsVisible(void) const
     {
     	return (_item->_isVisible >> 4) & 1; // 56
     }
 
-    void Append(MenuEntry *item) const
+    void MenuFolder::Append(MenuEntry *item) const
     {
     	_item->Append(item);
     }
 
-    void Append(MenuFolder *item) const
+    void MenuFolder::Append(MenuFolder *item) const
     {
     	_item->Append(item);
     }
 
-    std::vector<MenuEntry *> GetEntryList(void) const
+    std::vector<MenuEntry *> MenuFolder::GetEntryList(void) const
     {
     	return	_item->GetEntryList();
     }
 
-    std::vector<MenuFolder *> GetFolderList(void) const
+    std::vector<MenuFolder *> MenuFolder::GetFolderList(void) const
     {
     	return	_item->GetFolderList();
     }
 
-    std::string &Name(void) const
+    std::string &MenuFolder::Name(void) const
     {
     	return _item->_name; // 4
     }
 
-    std::string &Note(void) const
+    std::string &MenuFolder::Note(void) const
     {
     	return _item->_note; // 28
     }
 
-    u32 ItemsCount(void) const
+    u32 MenuFolder::ItemsCount(void) const
     {
     	return _item->ItemsCount();
     }
 
-    void Clear(void) const
+    void MenuFolder::Clear(void) const
     {
     	_item->Clear();
     }
 
-    void Remove(u32 startIndex, u32 count, bool destroy) const
+    void MenuFolder::Remove(u32 startIndex, u32 count, bool destroy) const
     {
     	_item->Remove(startIndex, count, destroy);
     }
 
-    MenuFolder *operator += (const MenuEntry *entry)
+    MenuFolder *MenuFolder::operator += (const MenuEntry *entry)
     {
     	_item->Append(entry);
     	return this;
     }
 
-    MenuFolder *operator -= (const MenuEntry *entry)
+    MenuFolder *MenuFolder::operator -= (const MenuEntry *entry)
     {
     	_item->Remove(entry);
     	return this;
     }
 
-    MenuFolder *operator += (const MenuFolder *folder)
+    MenuFolder *MenuFolder::operator += (const MenuFolder *folder)
     {
     	_item->Append(folder);
     	return this;
     }
 
-    MenuFolder *operator -= (const MenuFolder *folder)
+    MenuFolder *MenuFolder::operator -= (const MenuFolder *folder)
     {
     	_item->Remove(folder);
     	return this;
     }
 
-    void UseTopSeparator(Separator type = Separator::Filled) const
+    void MenuFolder::UseTopSeparator(Separator type = Separator::Filled) const
     {
         int v1; // r2
         char v2; // r3
@@ -128,7 +128,7 @@ namespace CTRPluginFramework
         return result;
     }
 
-    void UseBottomSeparator(Separator type = Separator::Filled) const
+    void MenuFolder::UseBottomSeparator(Separator type = Separator::Filled) const
     {
         char v1; // r12
 
