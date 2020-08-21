@@ -2,43 +2,29 @@
 
 namespace CTRPluginFramework
 {
-    // text box = this + 16 = str
-    // _messageBox = 0-1
-
-    TextBox::~TextBox(void)
+    MessageBox::~MessageBox(void)
     {
-    	// delete ptr; v1
+        // delete _messageBox;
     }
 
-    TextBox::~TextBox(void)
+    MessageBox::MessageBox(const std::string &title, const std::string &message, DialogType dialogType, ClearScreen clear);
     {
-    	TextBox::~TextBox(this);
-    	// operator delete
+        _messageBox = std::make_unique<MessageBox>(new MessageBox(title, message, dialogType, clear));
     }
 
-    MessageBox(const std::string &title, const std::string &message, DialogType dialogType, ClearScreen clear);
+    MessageBox::MessageBox(const std::string &message, DialogType dialogType, ClearScreen clear);
     {
-    	MessageBoxImpl::MessageBoxImpl(title, message, dialogType, clear);
-    }
-
-    MessageBox(const std::string &message, DialogType dialogType, ClearScreen clear);
-    {
-    	MessageBoxImpl::MessageBoxImpl(title, message, dialogType, clear);
-    }
-
-    MessageBox::~MessageBox(MessageBox *this)
-    {
-    	//delete _messageBox;
+        _messageBox = std::make_unique<MessageBox>(new MessageBox("", message, dialogType, clear));
     }
 
     MessageBox& MessageBox::SetClear(ClearScreen screen)
     {
-    	_messageBox.screen = screen;
+    	_messageBox->screen = screen;
     	return *this;
     }
 
-    bool operator()(void) const
+    bool MessageBox::operator()(void) const
     {
-    	return MessageBoxImpl::operator()();
+    	return _messageBox->operator()();
     }
 }
