@@ -33,6 +33,7 @@ Discord: ZettaD#6555
 - /Sources/CTRPluginFramework/System/File.cpp
 - /Sources/CTRPluginFramework/Menu/MenuEntry.cpp
 - /Sources/CTRPluginFramework/Menu/PluginMenu.cpp
+- /Sources/CTRPluginFramework/Menu/Directory.cpp
 - /Sources/CTRPluginFramework/Utils/LineWriter.cpp
 - /Sources/CTRPluginFramework/Graphics/OSD.cpp
 
